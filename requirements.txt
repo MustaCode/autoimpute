@@ -17,7 +17,7 @@ python-dotenv
 pytz
 pywatchman
 scikit-learn
-scipy==1.10.1
+scipy
 six
 threadpoolctl
 tzdata
