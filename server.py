@@ -348,3 +348,7 @@ def stopautoimpute():
     # json_data = dumps(list_cur)
 
     return 'success'
+
+@app.route('/test', methods=['GET'])
+def test():
+    return 'Hello from Server'

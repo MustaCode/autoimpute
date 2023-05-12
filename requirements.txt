@@ -1,0 +1,9 @@
+flask
+pandas
+numpy
+flask_cors
+scikit-learn
+pymongo
+certifi
+scipy
+Gunicorn
