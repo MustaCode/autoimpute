@@ -1,4 +1,5 @@
 # Import flask and datetime module for showing date and time
+import os
 import pandas as pd
 import numpy as np
 from flask import Flask, request, render_template, send_file, Response, send_from_directory, make_response
@@ -23,6 +24,8 @@ x = datetime.datetime.now()
 
 # Initializing flask app
 app = Flask(__name__)
+env_config = os.getenv("PROD_APP_SETTINGS", "config.DevelopmentConfig")
+app.config.from_object(env_config)
 
 CORS(app)
 # cors = CORS(app, resources={r"/*": {"origins": "*"}})
