@@ -13,6 +13,15 @@ from sklearn.metrics import r2_score, mean_squared_error
 from pandas.api.types import is_object_dtype, is_numeric_dtype, is_bool_dtype, is_string_dtype, is_float_dtype
 
 def imputex(df, df_bench):
+    # for col in df:
+    #     df[col] = df[col].apply(lambda x: str(x).replace(",", " -"))
+    #     df[col]
+
+    df = df.replace(['-'], np.nan)
+    df.replace(',',';', regex=True, inplace=True)
+
+    
+    # df = df.replace(',', '.')
  # PARSE & INITIAL GUESS SECTION
     print(df.isna().sum().sum(), " Total missing values before imputation")
 
@@ -146,9 +155,9 @@ def imputex(df, df_bench):
                 if y.value_counts()[i] == 1:
                     strat_flag = True
             if strat_flag == True:
-                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, random_state=0)
+                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
             else:
-                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, random_state=0, stratify=y)
+                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0, stratify=y)
                     
         else:
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=0)
@@ -196,11 +205,12 @@ def imputex(df, df_bench):
         # To convert numeric back to string for categorical feature
         if dv_type == 'classification':
             #lb = LabelBinarizer()
-            dv_labels = df_inim[dv_feature].value_counts().index.values
+            # dv_labels = df_inim[dv_feature].value_counts().index.values
             arr_dv_mv_predictions = np.array(df_dv_mv_predictions)
             #np.ravel(arr_dv_mv_predictions)
             #arr_dv_mv_predictions = arr_dv_mv_predictions.reshape(-1, 1)
-            predictions_fit = le.fit(dv_labels)
+
+            # predictions_fit = le.fit(dv_labels)
             predictions_ordinal = le.inverse_transform(np.ravel(arr_dv_mv_predictions))
             predictions_ordinal_df = pd.DataFrame(predictions_ordinal)
             df_dv_mv_predictions = predictions_ordinal_df.copy()
@@ -214,13 +224,17 @@ def imputex(df, df_bench):
         # Copy the index of imputed instances from the subset df_split_mv[dv_feature].isnull() to the original dataset
         df_inim.loc[df_dv_imputed.index, dv_feature] = df_dv_imputed[dv_feature_final]
 
-        print('DV: ' + dv_feature)
+        print('DV Feature: ' + dv_feature)
+        print('DV Final: ' + dv_feature)
         print('Model: ' + dv_type)
         print('A feature with missing values has been imputed')
 
     end = time.time()
     extra_time = end - start
     print(extra_time, "ImputeX in seconds")
+    print("==========================")
+    print("==========================")
+    print("length: ", len(df))
 
 
     # PERFORMANCE METRICS
